@@ -156,6 +156,8 @@ Once your MCP server is running and configured in Claude Desktop, you can ask Cl
 - "Stake 5 APT on Echo"
 - "Get details about transaction 0x123..."
 
+https://github.com/user-attachments/assets/1baafb7b-e535-4944-a3ea-59b1ab51c269
+
 Claude will use the appropriate tools to fulfill your requests, interacting with the Aptos blockchain and various protocols as needed.
 
 ## Troubleshooting
