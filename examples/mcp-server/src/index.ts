@@ -90,8 +90,6 @@ export async function main() {
         //console.log("MCP server started successfully");
     } catch (error) {
         console.error("Failed to start MCP server:", error);
-        // Continue running the program even if MCP server fails
-        //console.log("Continuing without MCP server...");
     }
 }
 
