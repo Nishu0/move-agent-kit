@@ -16,6 +16,7 @@
   "packageManager": "pnpm@10.5.2",
   "dependencies": {
     "dotenv": "^16.4.7",
+    "sdk": "link:@wormhole-foundation/sdk",
     "ts-node": "^10.9.2"
   }
 }

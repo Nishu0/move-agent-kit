@@ -4,7 +4,7 @@ import { AIMessage, BaseMessage, ChatMessage, HumanMessage } from "@langchain/co
 import { MemorySaver } from "@langchain/langgraph"
 import { createReactAgent } from "@langchain/langgraph/prebuilt"
 import { Message as VercelChatMessage } from "ai"
-import { AgentRuntime, LocalSigner, createAptosTools } from "move-agent-kit"
+import { AgentRuntime, LocalSigner, createAptosTools } from "../../../../../src"
 import { NextResponse } from "next/server"
 
 const llm = new ChatAnthropic({
