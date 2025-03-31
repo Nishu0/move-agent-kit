@@ -11,7 +11,9 @@ import {
     getTransaction
 } from "../../../src/tools/aptos";
 import { transferUsdcWithCctp,createAptosWrappedToken,getSupportedWormholeChains,tokenTransfer } from "../../../src/tools/wormhole/index";
+import {buyOpenRouterCredits} from "../../../src/tools/open-router/index";
 import { DynamicStructuredTool } from "@langchain/core/tools";
+import { chain } from "@wormhole-foundation/sdk/dist/cjs";
 
 dotenv.config();
 
@@ -32,7 +34,6 @@ export async function main() {
     
     // Validate and get private key from environment
     const privateKeyStr = process.env.APTOS_PRIVATE_KEY;
-    const ethereumPrivateKeyStr = process.env.ETHEREUM_PRIVATE_KEY;
     if (!privateKeyStr) {
         throw new Error("Missing APTOS_PRIVATE_KEY environment variable");
     }
@@ -52,7 +53,7 @@ export async function main() {
     const tools = [
         new DynamicStructuredTool({
             name: "get_balance",
-            description: "Get the balance of a token if no token is provided, it will return the balance of the APT. Divide the balance by 10^8 to get the human readable balance. Mainet USDC is 0xbae207659db88bea0cbead6da0ed00aac12edcdda169e591cd41c94180b46f3bS use as mint param and it is 6 decimal token so divide by 10^6 to get human readable balance",
+            description: "Get the balance of a token if no token is provided, it will return the balance of the APT. Divide the balance by 10^6 to get the human readable balance for usdc which is 0xbae207659db88bea0cbead6da0ed00aac12edcdda169e591cd41c94180b46f3b address token.",
             schema: z.object({
                 mint: z.string().optional()
             }),
@@ -94,7 +95,7 @@ export async function main() {
         }),
         new DynamicStructuredTool({
             name: "token_transfer",
-            description: "Transfer a token from the source chain to the destination chain. When the base is used the token address is taget chain is ethereum and the network type is mainet and if aptos is the source chain then token address is 0xbae207659db88bea0cbead6da0ed00aac12edcdda169e591cd41c94180b46f3b",
+            description: "Transfer a token from the source chain to the destination chain",
             schema: z.object({
                 targetChain: z.enum(["Solana", "Ethereum", "Aptos", "Sui", "Terra", "Bsc", "Polygon", "Avalanche", "Oasis", "Algorand", "Aurora", "Fantom", "Karura", "Acala", "Klaytn", "Celo", "Near"]),
                 networkType: z.enum(["Mainnet", "Testnet", "Devnet"]),
@@ -116,15 +117,9 @@ export async function main() {
         }),
         new DynamicStructuredTool({
             name: "transfer_usdc_with_cctp",
-            description: `this tool can be used to Transfer USDC from Aptos to another chain.
-    
-    Inputs (input is a JSON string):
-    targetChain: string, eg "Ethereum" or "Avalanche" or "Optimism" or "Arbitrum" or "Aptos" or "Solana" or "Sui"
-    transferAmount: number, eg 1 or 0.01 (required)
-    networkType: string, eg "Mainnet" or "Testnet" or "Devnet" (required)
-    `,
+            description: "Transfer a USDC from the source chain to the destination chain using CCTP",
             schema: z.object({
-                targetChain: z.enum(["Solana", "Ethereum", "Aptos", "Sui", "Terra", "Bsc", "Polygon", "Avalanche", "Oasis", "Algorand", "Aurora", "Fantom", "Karura", "Acala", "Klaytn", "Celo", "Near", "Base"]),
+                targetChain: z.enum(["Solana", "Ethereum", "Aptos", "Sui", "Terra", "Bsc", "Polygon", "Avalanche", "Oasis", "Algorand", "Aurora", "Fantom", "Karura", "Acala", "Klaytn", "Celo", "Base"]),
                 networkType: z.enum(["Mainnet", "Testnet", "Devnet"]),
                 transferAmount: z.string(),
             }),
@@ -133,7 +128,19 @@ export async function main() {
                 transferAmount,
                 networkType
             })
-        })
+        }),
+        new DynamicStructuredTool({
+            name: "buy_openrouter_credits",
+            description: "This tool can be used to buy OpenRouter credits using USDC from your Aptos wallet. It will automatically transfer the USDC from Aptos to Base chain and then purchase the credits.",
+            schema:z.object({
+                transferAmount: z.string(),
+                networkType: z.enum(["Mainnet", "Testnet", "Devnet"]),
+            }),
+            func: async({ transferAmount, networkType }) => buyOpenRouterCredits(
+                agentRuntime,
+                { amountUsd: Number(transferAmount), networkType }
+            )
+        }),
     ];
     
     // Store the tools in agentRuntime.config

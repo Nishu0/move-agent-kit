@@ -5,8 +5,8 @@ set -e
 export ANTHROPIC_API_KEY=""
 export APTOS_PRIVATE_KEY=""
 export ETH_PRIVATE_KEY=""
-export ANKR_API_KEY=""
 export ALCHEMY_RPC_URL=""
+export OPENROUTER_API_KEY=""
 
 # Change to the server directory
 cd /Users/nisargthakkar/kit/move-agent-kit/examples/mcp-server

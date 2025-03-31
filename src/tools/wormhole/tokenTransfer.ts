@@ -1,4 +1,4 @@
-import { getTokenDecimals, getSignerForChain } from "./helper";
+import { getTokenDecimals, getSigner } from "./helper";
 import evm from "@wormhole-foundation/sdk/evm";
 import { AptosTokenTransferRequest } from "./types";
 import {
@@ -40,10 +40,10 @@ export const tokenTransfer = async (
 
     // Get chain contexts and signers
     const sourceChain = whInstance.getChain(sourceChainId);
-    const sourceSigner = await getSignerForChain(sourceChain);
+    const sourceSigner = await getSigner(sourceChain);
 
     const destChain = whInstance.getChain(destChainId);
-    const destSigner = await getSignerForChain(destChain);
+    const destSigner = await getSigner(destChain);
 
     // Format token identifier appropriately
     let tokenIdentifier: TokenId;

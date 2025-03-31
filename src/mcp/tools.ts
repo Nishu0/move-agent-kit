@@ -21,7 +21,8 @@ import {
     getUserPosition,
     getUserAllPositions,
     repayToken,
-    withdrawToken
+    withdrawToken,
+    buyOpenRouterCredits
 } from "../tools"
 
 import {
@@ -701,6 +702,16 @@ export function createMcpTools(agentRuntime: AgentRuntime) {
             }),
             func: async ({ pair, isLong, sizeDelta, collateralDelta }) => 
                 merkleTradePlaceMarketOrder(agentRuntime, pair, isLong, sizeDelta, collateralDelta)
+        }),
+        
+        // OpenRouter tools
+        new DynamicStructuredTool({
+            name: "openrouter_buy_credits",
+            description: "Buy OpenRouter API credits using USDC on Base. Requires USDC on Base chain and ETH for gas.",
+            schema: z.object({
+                amountUsd: z.number().describe("Amount of credits to buy in USD")
+            }),
+            func: async ({ amountUsd }) => buyOpenRouterCredits(agentRuntime, { amountUsd })
         })
     ]
 } 

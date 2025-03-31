@@ -62,6 +62,7 @@ import {
 	unstakeAPTWithThala,
 } from "./tools/thala"
 import {transferUsdcWithCctp, createAptosWrappedToken,getSupportedWormholeChains, tokenTransfer} from "./tools/wormhole"
+import {buyOpenRouterCredits} from "./tools/open-router"
 import { getTokenByTokenName } from "./utils/get-pool-address-by-token-name"
 
 export class AgentRuntime {
@@ -331,5 +332,12 @@ export class AgentRuntime {
 			networkType,
 			tokenAddress
 		})
+	}
+	//oper-router
+	buyOpenRouterCredits(amountUsd: number, networkType: Network){
+		return buyOpenRouterCredits(
+			this,
+			{ amountUsd, networkType }
+		)
 	}
 }
