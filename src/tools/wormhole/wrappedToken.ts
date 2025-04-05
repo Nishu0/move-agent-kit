@@ -3,7 +3,7 @@ import evm from "@wormhole-foundation/sdk/evm";
 import solana from "@wormhole-foundation/sdk/solana";
 import sui from "@wormhole-foundation/sdk/sui";
 import aptos from "@wormhole-foundation/sdk/aptos";
-import { getSignerForChain } from "./helper";  
+import { getSigner } from "./helper";  
 import {
   Chain,
   Network,
@@ -111,8 +111,8 @@ export const createAptosWrappedToken = async (
     }
 
     // Set up signers for both source and destination chains
-    const { signer: destSigner } = await getSignerForChain(destinationChain, gasLimitValue);
-    const { signer: originSigner } = await getSignerForChain(originChain);
+    const { signer: destSigner } = await getSigner(destinationChain, gasLimitValue);
+    const { signer: originSigner } = await getSigner(originChain);
 
     // Prepare token bridge instances
     const tokenBridgeDest = await destinationChain.getTokenBridge();
