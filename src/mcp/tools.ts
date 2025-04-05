@@ -711,7 +711,7 @@ export function createMcpTools(agentRuntime: AgentRuntime) {
             schema: z.object({
                 amountUsd: z.number().describe("Amount of credits to buy in USD")
             }),
-            func: async ({ amountUsd }) => buyOpenRouterCredits(agentRuntime, { amountUsd })
+            func: async ({ amountUsd }) => buyOpenRouterCredits(agentRuntime, { amountUsd, networkType: "Mainnet" })
         })
     ]
 } 
